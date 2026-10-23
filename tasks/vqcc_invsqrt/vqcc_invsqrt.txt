@@ -58,14 +58,19 @@ tolerance; synthesis error of rotations consumes the rest automatically.
 
 ## Tools in your sandbox (read-only)
 
-- `python-km` = .venv/bin/python-km — python with `kickmix` importable.
-- `/path/to/repo/sandbox_share/API_NOTES.md` — kickmix API docstrings.
-- `sandbox_share/selfcheck.py CIRCUIT.kmb [--n 2048] [--xs 1,2,...]` — simulates
-  a BUILT circuit on sampled inputs, reports worst error/tolerance ratio,
-  qubits, static Toffolis, reaction depth. Sampled only: the grader tests all
-  3.1M inputs; leave margin.
-- `sandbox_share/paper.pdf` — the benchmark paper (background, cost model,
-  the reference algorithm and its paper-level context).
+- `python-km` — python with `kickmix` importable (on PATH; also at
+  /home/v-karn-26/projects/kickmix-compiler/.venv/bin/python-km).
+- /home/v-karn-26/projects/kickmix-compiler/sandbox_share/API_NOTES.md — the
+  kickmix API docstrings.
+- /home/v-karn-26/projects/kickmix-compiler/sandbox_share/selfcheck.py —
+  simulate a BUILT circuit on sampled inputs:
+  `python-km /home/v-karn-26/projects/kickmix-compiler/sandbox_share/selfcheck.py CIRCUIT.kmb [--n 2048] [--xs 1,2,...]`
+  Reports worst error/tolerance ratio, qubits, static Toffolis, reaction depth.
+  Sampled only: the grader tests all 3.1M inputs; leave margin.
+- /home/v-karn-26/projects/kickmix-compiler/sandbox_share/paper.pdf — the
+  benchmark paper (background, cost model, the reference algorithm).
+- /home/v-karn-26/projects/kickmix-compiler/vendor/kickmix — the kickmix C++
+  source (how the simulator/primitives work internally).
 - You may run shell commands inside your branch directory. Anything outside
   it (other branches, past rounds' code, graders) does not exist for you:
   earlier rounds are visible only as `./history/*/…/proposal.md` and
