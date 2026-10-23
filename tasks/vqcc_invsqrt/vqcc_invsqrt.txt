@@ -80,3 +80,12 @@ tolerance; synthesis error of rotations consumes the rest automatically.
 
 Write exactly `proposal.md` (mechanism, evidence, why not a repeat,
 expected benefit/risk) and `artifact/program.py` in your attempt directory.
+
+## Time budget
+
+Your session is capped (~90 minutes hard). Budget accordingly: reproduce and
+understand the baseline quickly, then make ONE well-chosen change and get it
+building and self-checked WELL before the deadline. An unmodified copy of the
+baseline that builds and verifies scores 1.0; a timeout or a program that
+fails to build scores 0.0 — always leave time to write `artifact/program.py`
+and `proposal.md`. Do not spend the whole budget exploring the API.
