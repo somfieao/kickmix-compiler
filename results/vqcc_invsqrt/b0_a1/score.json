@@ -1,0 +1,21 @@
+{
+  "program": "/home/v-karn-26/projects/kickmix-compiler/workspaces/invsqrt/explore_b0/attempt_01/artifact/program.py",
+  "build_stdout_tail": "Wrote /tmp/vqcc_invsqrt_j99wi4s4/invsqrt.kmb (kmb): 3,141 Toffolis, 166 qubits.",
+  "circuit_bytes": 453547,
+  "combined_score": 3.694133816066735,
+  "improvement_over_reference": 3.694133816066735,
+  "score": 3.694133816066735,
+  "toffoli_equivalent": 3386.6364289509893,
+  "toffoli_count": 3141.0,
+  "max_toffoli_count": 3141,
+  "t_count": 1.0,
+  "rotation_count": 36.0,
+  "rotation_eps": 1.5579396307708024e-12,
+  "num_qubits": 166,
+  "reaction_depth": 1438,
+  "num_ops": 52505,
+  "verified_shots": 200540928,
+  "worst_error_over_tolerance": 0.4712060655998549,
+  "worst_x": 3116927,
+  "circuit_sha256": "38d90b452ef049e40061bfe5f3601385b1993b3bddb39cc3a0eab92adf62e02b"
+}
