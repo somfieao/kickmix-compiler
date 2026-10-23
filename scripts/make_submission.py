@@ -87,12 +87,19 @@ def main() -> int:
                       f'(improvement {2076774.233715282 / verdict["score"]:.4f})')
 
         out = Path(args.out)
-        sample_root = (DATA / 'sample_submission').resolve()
+        sample_root = DATA / 'sample_submission'
+        files: list[tuple[Path, str]] = []
+        dqi = (sample_root / 'dqi.kmb')
+        if dqi.is_file():
+            files.append((dqi, 'dqi.kmb'))
+        dfth = (sample_root / 'dfthcsos').resolve()
+        for f in sorted(dfth.rglob('*')):
+            if f.is_file():
+                files.append((f, f'dfthcsos/{f.name}'))
         with zipfile.ZipFile(out, 'w', zipfile.ZIP_STORED) as zf:
             zf.write(circuit, 'invsqrt.kmb')
-            for f in sorted(sample_root.rglob('*')):
-                if f.is_file() and f.name != 'invsqrt.kmb':
-                    zf.write(f, f.relative_to(sample_root))
+            for f, arc in files:
+                zf.write(f, arc)
     print(f'wrote {out}')
     return 0
 
