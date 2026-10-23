@@ -1,0 +1,5 @@
+{
+  "peak_weekday_windows_utc": [["01:00", "04:00"], ["06:00", "10:00"]],
+  "cn_public_holidays": ["2027-01-01"],
+  "notes": "DeepSeek peak pricing: Mon-Fri (excluding Chinese public holidays) 01:00-04:00 and 06:00-10:00 UTC. Everything else, including full weekends and holidays, is off-peak. Verify the 2027 State Council holiday schedule when published and update cn_public_holidays (only weekday holidays matter)."
+}

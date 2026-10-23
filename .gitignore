@@ -1,0 +1,12 @@
+.venv/
+.mamba/
+.toolchains/
+data/
+workspaces/
+vendor/
+tools/micromamba
+.env
+.kaggle-token
+__pycache__/
+*.pyc
+nohup.out
