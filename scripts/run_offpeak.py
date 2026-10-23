@@ -115,6 +115,8 @@ def main() -> None:
             continue
         resume = '1' if (REPO / 'workspaces' / 'invsqrt').exists() else '0'
         env['RESUME'] = resume
+        rounds_done = len(list((REPO / 'workspaces' / 'invsqrt' / 'history').glob('iter*'))) \
+            if (REPO / 'workspaces' / 'invsqrt' / 'history').exists() else 0
         budget = None
         nxt = next_transition(now)
         if is_peak(nxt + dt.timedelta(minutes=1)):
@@ -132,6 +134,20 @@ def main() -> None:
         if rc == 0:
             log('all rounds complete')
             return 0
+        now_rounds = len(list((REPO / 'workspaces' / 'invsqrt' / 'history').glob('iter*'))) \
+            if (REPO / 'workspaces' / 'invsqrt' / 'history').exists() else 0
+        if now_rounds > rounds_done:
+            stall = 0  # progress happened; learning failures after the last
+            # round are handled by run_task.sh's rc==0 path.
+            if now_rounds >= int(env['ROUNDS']):
+                log('all rounds archived (nonzero rc from final learning)')
+                return 0
+        else:
+            stall += 1
+            if stall >= 4:
+                log('no round progress after 4 consecutive failures; stopping '
+                    '(inspect workspaces/invsqrt/learning and retry manually)')
+                return 3
         time.sleep(30)
 
 

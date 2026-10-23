@@ -8,3 +8,4 @@
 | invsqrt verifier + reference | Kaggle `google-verifiable-quantum-circuit-compilation` dataset (`verifiers/invsqrt/`) | downloaded 2026-10-23 |
 | reference circuit | `data/sample_submission/invsqrt.kmb`, sha256 e2bf8eb64350a4460a271fc7f1d591ef125b1e276377e9a0f64b96ab3ca321e1 — reproduced bit-for-bit by `tasks/vqcc_invsqrt/init_program.py` | |
 | reference score | 2076774.233715282 (Q=260, C=7987.59, 200,540,928 shots) measured with the official verifier | |
+note: /tmp/opencode/sample_submission_store holds submission placeholders (re-download if /tmp is wiped)

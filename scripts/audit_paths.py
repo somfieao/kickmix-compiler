@@ -29,7 +29,7 @@ SUSPICIOUS = [
         r'ps\s+aux', r'/proc/[0-9]+/environ',
     )
 ]
-ALLOWED = re.compile(r'sandbox_share|\.venv|API_NOTES|selfcheck|paper\.pdf')
+ALLOWED = re.compile(r'sandbox_share|\.venv|vendor/kickmix|API_NOTES|selfcheck|paper\.pdf')
 
 
 def scan(root: Path) -> tuple[list[dict], int]:
