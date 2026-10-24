@@ -25,3 +25,21 @@ deepseek-flash at low effort):
 Verified on all 200,540,928 shots (64 × every x ∈ [1, 3,133,452]) with a fresh
 random salt; circuit sha256 `38d90b45…2e02b`; cost breakdown in
 `eval/score.json`. `proposal.md` records the agent's mechanism description.
+
+## Sample run — workflow validation (2026-10-24)
+
+Continued the existing `invsqrt` campaign under the pinned-upstream harness
+(`tasks/vqcc_invsqrt/launch.sh dream_rsi`, DeepSeek-V4.1-Flash via the official
+API, provider-default reasoning effort, 2 branches × 2 attempts, agent cap
+5400 s):
+
+- `b1_a0` re-run: 36 turns, $4.01, 11 min; the agent's new circuit failed
+  verification (`x=2` phase error 0.5 turns) — a genuine attempt outcome.
+- `b0_a0` re-run: failed at the 32k output-token cap (config raised to 128k
+  afterwards).
+- Offline learning: 3 policy rewrites + incumbent replay; `r0003` selected and
+  promoted to `runs/vqcc_invsqrt/policy/method.py`.
+- Round archived (`history/iter000`), best score 3.694×, exit 0.
+- Agent accounting: **$15.91** total (4 successful calls).
+- Permission red-team: own branch ALLOWED; sibling branch and workspace policy
+  both DENIED (read scoping enforced by the SDK, not just the prompt).

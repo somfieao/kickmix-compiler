@@ -272,6 +272,7 @@ Record submissions (ref + expected score) in `runs/submissions.log`.
 | `evolve` exits 1 | Normal when the final learning step selects no policy but all rounds are archived. |
 | `evolve` exits 2 | Learning exhausted its rewrite retries, or the workspace exists without `RESUME=1`. |
 | Provider 401/402/403 | The run stops itself and writes `runs/vqcc_invsqrt-accounting/ACCESS_ERROR.json`; fix access, then rerun with `RESUME=1`. |
+| `response exceeded the N output token maximum` | Raise `CLAUDE_CODE_MAX_OUTPUT_TOKENS` (128000 is set in `configs/vqcc.env`; the model supports far more). |
 
 ## Licenses and attribution
 
