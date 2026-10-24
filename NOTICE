@@ -1,0 +1,19 @@
+Task-adapter harness for the Kaggle "Google Quantum AI - Verifiable Quantum
+Circuit Compilation" competition.
+
+This distribution contains:
+
+- Original harness code (scripts/, tasks/, configs/): Apache-2.0.
+- Dream-RSI, fetched at its pinned revision by scripts/bootstrap.sh and left
+  unmodified: Copyright Google LLC, Apache-2.0
+  (https://github.com/google-research/dream-rsi).
+- kickmix, fetched from Qualtran at the pinned revision by scripts/bootstrap.sh:
+  Copyright Google LLC, Apache-2.0
+  (https://github.com/quantumlib/Qualtran).
+- Competition verifiers and reference circuits, downloaded by
+  scripts/fetch_data.sh from the Kaggle competition dataset; use is subject to
+  the competition rules
+  (https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation/rules).
+- The DREAM-RSI engine and the verification-based evaluation protocol are
+  described in arXiv:2609.14858 (Dream-RSI) and arXiv:2610.23832 (verifiable
+  quantum circuit compilation).

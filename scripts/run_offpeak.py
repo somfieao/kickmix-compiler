@@ -1,11 +1,11 @@
-"""Off-peak scheduler wrapping scripts/run_task.sh.
+"""Off-peak scheduler wrapping tasks/<task>/launch.sh dream_rsi.
 
 Runs DREAM-RSI rounds only during DeepSeek off-peak hours (peak = Mon-Fri
 01:00-04:00 and 06:00-10:00 UTC, excluding Chinese public holidays). At a peak
 boundary the child process group gets SIGINT (DREAM-RSI checkpoints per round;
 RESUME=1 continues), and the loop relaunches in the next off-peak window.
 
-Stop: touch workspaces/STOP  (removed automatically on the next start).
+Stop: touch runs/STOP  (removed automatically on the next start).
 
 Usage:
     python scripts/run_offpeak.py [--task vqcc_invsqrt] [--rounds 5]
@@ -28,23 +28,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from offpeak import is_peak, next_transition  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
-STOP_FILE = REPO / 'workspaces' / 'STOP'
-LOG = REPO / 'workspaces' / 'scheduler.log'
+STOP_FILE = REPO / 'runs' / 'STOP'
+LOG = REPO / 'runs' / 'scheduler.log'
 
 
 def log(msg: str) -> None:
     LOG.parent.mkdir(parents=True, exist_ok=True)
     stamp = dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
-    LOG.write_text(LOG.read_text() + f'[{stamp}] {msg}\n') if LOG.exists() else \
-        LOG.write_text(f'[{stamp}] {msg}\n')
+    with LOG.open('a') as fh:
+        fh.write(f'[{stamp}] {msg}\n')
     print(f'[{stamp}] {msg}', flush=True)
 
 
 def run_once(env: dict[str, str], graceful_deadline: float | None) -> int:
-    """Run run_task.sh in its own process group; SIGINT it at a peak boundary
-    (or when graceful_deadline passes). Returns the exit code."""
+    """Run launch.sh dream_rsi in its own process group; SIGINT it at a peak
+    boundary (or when graceful_deadline passes). Returns the exit code."""
     proc = subprocess.Popen(
-        ['bash', str(REPO / 'scripts' / 'run_task.sh')],
+        ['bash', str(REPO / 'tasks' / env['TASK'] / 'launch.sh'), 'dream_rsi'],
         cwd=str(REPO), env=env, start_new_session=True,
     )
     interrupted = False
@@ -88,8 +88,7 @@ def run_once(env: dict[str, str], graceful_deadline: float | None) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task', default='vqcc_invsqrt',
-                        help='task directory under tasks/ (default: vqcc_invsqrt)')
+    parser.add_argument('--task', default='vqcc_invsqrt')
     parser.add_argument('--rounds', type=int, default=5)
     parser.add_argument('--branches', type=int, default=10)
     parser.add_argument('--refine', type=int, default=10)
@@ -102,7 +101,7 @@ def main() -> None:
         STOP_FILE.unlink()
     task = args.task
     short = task[5:] if task.startswith('vqcc_') else task
-    ws = REPO / 'workspaces' / short
+    ws = REPO / 'runs' / short
     env = os.environ.copy()
     env.update(TASK=task, ROUNDS=str(args.rounds), BRANCHES=str(args.branches),
                REFINE=str(args.refine), MAX_WORKERS=str(args.max_workers))
@@ -134,17 +133,16 @@ def main() -> None:
             if remain <= 0:
                 log('max-hours budget exhausted; exiting')
                 return 0
-        log(f'launching run_task.sh (RESUME={resume}, '
+        log(f'launching launch.sh dream_rsi (RESUME={resume}, '
             f'budget={"none" if budget is None else f"{budget / 3600:.1f}h"})')
         rc = run_once(env, None if budget is None else time.time() + budget)
-        log(f'run_task.sh exited rc={rc}')
+        log(f'launch.sh exited rc={rc}')
         if rc == 0:
             log('all rounds complete')
             return 0
         now_rounds = len(list((ws / 'history').glob('iter*'))) if (ws / 'history').exists() else 0
         if now_rounds > rounds_done:
-            stall = 0  # progress happened; learning failures after the last
-            # round are handled by run_task.sh's rc==0 path.
+            stall = 0
             if now_rounds >= int(env['ROUNDS']):
                 log('all rounds archived (nonzero rc from final learning)')
                 return 0

@@ -1,0 +1,6 @@
+{
+  "claude_cli": "/path/to/claude",
+  "worker_mode": "local",
+  "vqcc_worker_image": "",
+  "notes": "Generated per host by scripts/bootstrap.sh. Ignored by Git. worker_mode=local uses .worker-venv built by tasks/vqcc_invsqrt/setup.sh; worker_mode=docker uses vqcc_worker_image."
+}

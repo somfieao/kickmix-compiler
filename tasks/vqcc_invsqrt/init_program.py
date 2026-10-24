@@ -33,9 +33,6 @@ Development aids inside the block (yours to modify or discard):
     the reference pipeline; use it to check designs before paying for circuit
     construction.
   * `relative_error(n_p, prec, xs)` — relative error of the model vs exact.
-  * `sandbox_share/selfcheck.py` (read-only, outside your node dir) simulates a
-    built .kmb on sampled inputs and reports the phase error ratio — use it to
-    test a built circuit quickly.
 """
 
 from __future__ import annotations

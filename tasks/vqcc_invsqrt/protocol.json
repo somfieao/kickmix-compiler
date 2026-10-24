@@ -1,0 +1,24 @@
+{
+  "task": "vqcc_invsqrt",
+  "competition": "google-verifiable-quantum-circuit-compilation",
+  "benchmark": "Google Quantum AI VQCC - Benchmark I (1/sqrt(x) phasing)",
+  "verifier": "data/verifiers/invsqrt/verify_submission_invsqrt.py",
+  "reference_circuit": "data/sample_submission/invsqrt.kmb",
+  "reference_sha256": "e2bf8eb64350a4460a271fc7f1d591ef125b1e276377e9a0f64b96ab3ca321e1",
+  "reference_score": 2076774.233715282,
+  "artifact": "invsqrt.kmb",
+  "metric": "score = Q * (Toffolis + T/4); lower is better; combined_score = reference_score / score",
+  "register": {"name": "x", "width": 22, "little_endian": true},
+  "domain": {"min_x": 1, "max_x": 3133452, "shots_per_x": 64},
+  "constraints": {
+    "register_schema": "exactly one register 'x' with 22 distinct qubits",
+    "scratch": "all non-x qubits must return to |0>",
+    "tolerance": "phase error in turns <= 2^-24 / sqrt(x); exhaustive over x"
+  },
+  "timeouts": {"build_seconds": 900, "verify_seconds": 1800, "eval_seconds": 3000},
+  "worker": {
+    "local_venv": ".worker-venv",
+    "dockerfile": "Dockerfile.worker",
+    "docker_image_name": "kickmix-vqcc-invsqrt"
+  }
+}

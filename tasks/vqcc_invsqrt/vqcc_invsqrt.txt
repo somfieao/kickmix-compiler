@@ -56,25 +56,24 @@ tolerance; synthesis error of rotations consumes the rest automatically.
   the reference pipeline; adapt it (or write your own) to check designs in
   milliseconds instead of building circuits.
 
-## Tools in your sandbox (read-only)
+## What you can see
 
-- `python-km` — python with `kickmix` importable (on PATH; also at
-  /home/v-karn-26/projects/kickmix-compiler/.venv/bin/python-km).
-- /home/v-karn-26/projects/kickmix-compiler/sandbox_share/API_NOTES.md — the
-  kickmix API docstrings.
-- /home/v-karn-26/projects/kickmix-compiler/sandbox_share/selfcheck.py —
-  simulate a BUILT circuit on sampled inputs:
-  `python-km /home/v-karn-26/projects/kickmix-compiler/sandbox_share/selfcheck.py CIRCUIT.kmb [--n 2048] [--xs 1,2,...]`
-  Reports worst error/tolerance ratio, qubits, static Toffolis, reaction depth.
-  Sampled only: the grader tests all 3.1M inputs; leave margin.
-- /home/v-karn-26/projects/kickmix-compiler/sandbox_share/paper.pdf — the
-  benchmark paper (background, cost model, the reference algorithm).
-- /home/v-karn-26/projects/kickmix-compiler/vendor/kickmix — the kickmix C++
-  source (how the simulator/primitives work internally).
-- You may run shell commands inside your branch directory. Anything outside
-  it (other branches, past rounds' code, graders) does not exist for you:
-  earlier rounds are visible only as `./history/*/…/proposal.md` and
-  `eval/score.json`.
+You have file tools only (Read/Grep/Glob/Edit/Write), scoped to your branch
+folder:
+
+- `./problem.txt` — this statement.
+- `./baseline/artifact/program.py` — the reference builder (your starting
+  point; its measured score is in `./baseline/eval/score.json`).
+- `./attempt_*/` — your branch's earlier attempts: `proposal.md`,
+  `artifact/program.py` (your own lineage's code), `eval/score.json`,
+  `error.txt`.
+- `./history/iterNNN/…` — earlier rounds: each attempt's `proposal.md` and
+  `eval/score.json` only. Earlier rounds' program code is NOT available.
+
+There is no shell. You cannot run the circuit; reason from the reference
+implementation and from earlier attempts' proposals and scores. Everything
+outside your branch (other branches, graders, this machine) does not exist for
+you.
 
 ## Output
 
@@ -83,9 +82,9 @@ expected benefit/risk) and `artifact/program.py` in your attempt directory.
 
 ## Time budget
 
-Your session is capped (~90 minutes hard). Budget accordingly: reproduce and
-understand the baseline quickly, then make ONE well-chosen change and get it
-building and self-checked WELL before the deadline. An unmodified copy of the
-baseline that builds and verifies scores 1.0; a timeout or a program that
-fails to build scores 0.0 — always leave time to write `artifact/program.py`
-and `proposal.md`. Do not spend the whole budget exploring the API.
+Your session is capped by the launcher (up to ~3 hours). Budget accordingly:
+read the baseline quickly, then make ONE well-chosen change and write it
+carefully — you cannot run the code, so double-check it by reading. An
+unmodified copy of the baseline that builds and verifies scores 1.0; a timeout
+or a program that fails to build scores 0.0 — always leave time to write
+`artifact/program.py` and `proposal.md`.

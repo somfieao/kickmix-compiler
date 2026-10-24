@@ -22,10 +22,10 @@ import zipfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-WORKSPACE = REPO / 'workspaces' / 'invsqrt'
+WORKSPACE = REPO / 'runs' / 'vqcc_invsqrt'
 VERIFIER = REPO / 'data' / 'verifiers' / 'invsqrt' / 'verify_submission_invsqrt.py'
 DATA = REPO / 'data'
-PYTHON = REPO / '.venv' / 'bin' / 'python-km'
+PYTHON = REPO / '.worker-venv' / 'bin' / 'python-km'
 COMP = 'google-verifiable-quantum-circuit-compilation'
 
 

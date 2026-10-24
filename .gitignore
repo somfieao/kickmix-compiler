@@ -1,14 +1,20 @@
+# environments
+.venv/
+.worker-venv/
+dist/
+# provider credentials and per-host profiles
+.credentials/
+configs/hosts/*.json
+!configs/hosts/example.json
+# pinned upstream checkouts (scripts/bootstrap.sh)
+upstream/
+# competition data and run state
 data/
-dream-rsi/
+runs/
+# local secrets / artifacts
 .env
 .kaggle-token
-.mamba/
-nohup.out
-*.pyc
-__pycache__/
-.toolchains/
-tools/micromamba
-vendor/
-.venv/
-workspaces/
 *.zip
+__pycache__/
+*.pyc
+nohup.out

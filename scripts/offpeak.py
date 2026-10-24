@@ -15,7 +15,7 @@ import json
 import sys
 from pathlib import Path
 
-CONFIG = Path(__file__).resolve().parents[1] / 'config' / 'offpeak.json'
+CONFIG = Path(__file__).resolve().parents[1] / 'configs' / 'offpeak.json'
 
 
 def _load() -> tuple[list[tuple[dt.time, dt.time]], set[str]]:
