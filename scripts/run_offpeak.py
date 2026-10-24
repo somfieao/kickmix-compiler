@@ -100,8 +100,7 @@ def main() -> None:
     if STOP_FILE.exists():
         STOP_FILE.unlink()
     task = args.task
-    short = task[5:] if task.startswith('vqcc_') else task
-    ws = REPO / 'runs' / short
+    ws = REPO / 'runs' / task
     env = os.environ.copy()
     env.update(TASK=task, ROUNDS=str(args.rounds), BRANCHES=str(args.branches),
                REFINE=str(args.refine), MAX_WORKERS=str(args.max_workers))
