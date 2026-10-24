@@ -8,7 +8,8 @@ RESUME=1 continues), and the loop relaunches in the next off-peak window.
 Stop: touch workspaces/STOP  (removed automatically on the next start).
 
 Usage:
-    python scripts/run_offpeak.py [--rounds 5] [--branches 10] [--refine 10]
+    python scripts/run_offpeak.py [--task vqcc_invsqrt] [--rounds 5]
+                                  [--branches 10] [--refine 10]
                                   [--max-workers 10] [--max-hours 0]
 """
 
@@ -87,6 +88,8 @@ def run_once(env: dict[str, str], graceful_deadline: float | None) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument('--task', default='vqcc_invsqrt',
+                        help='task directory under tasks/ (default: vqcc_invsqrt)')
     parser.add_argument('--rounds', type=int, default=5)
     parser.add_argument('--branches', type=int, default=10)
     parser.add_argument('--refine', type=int, default=10)
@@ -97,10 +100,15 @@ def main() -> None:
 
     if STOP_FILE.exists():
         STOP_FILE.unlink()
+    task = args.task
+    short = task[5:] if task.startswith('vqcc_') else task
+    ws = REPO / 'workspaces' / short
     env = os.environ.copy()
-    env.update(ROUNDS=str(args.rounds), BRANCHES=str(args.branches),
+    env.update(TASK=task, ROUNDS=str(args.rounds), BRANCHES=str(args.branches),
                REFINE=str(args.refine), MAX_WORKERS=str(args.max_workers))
     t0 = time.time()
+    stall = 0
+    log(f'task={task} workspace={ws}')
 
     while True:
         if STOP_FILE.exists():
@@ -113,10 +121,9 @@ def main() -> None:
             log(f'peak window; sleeping {wait_s / 60:.0f} min until {nxt:%H:%M} UTC')
             time.sleep(wait_s)
             continue
-        resume = '1' if (REPO / 'workspaces' / 'invsqrt').exists() else '0'
+        resume = '1' if ws.exists() else '0'
         env['RESUME'] = resume
-        rounds_done = len(list((REPO / 'workspaces' / 'invsqrt' / 'history').glob('iter*'))) \
-            if (REPO / 'workspaces' / 'invsqrt' / 'history').exists() else 0
+        rounds_done = len(list((ws / 'history').glob('iter*'))) if (ws / 'history').exists() else 0
         budget = None
         nxt = next_transition(now)
         if is_peak(nxt + dt.timedelta(minutes=1)):
@@ -134,8 +141,7 @@ def main() -> None:
         if rc == 0:
             log('all rounds complete')
             return 0
-        now_rounds = len(list((REPO / 'workspaces' / 'invsqrt' / 'history').glob('iter*'))) \
-            if (REPO / 'workspaces' / 'invsqrt' / 'history').exists() else 0
+        now_rounds = len(list((ws / 'history').glob('iter*'))) if (ws / 'history').exists() else 0
         if now_rounds > rounds_done:
             stall = 0  # progress happened; learning failures after the last
             # round are handled by run_task.sh's rc==0 path.
@@ -145,8 +151,8 @@ def main() -> None:
         else:
             stall += 1
             if stall >= 4:
-                log('no round progress after 4 consecutive failures; stopping '
-                    '(inspect workspaces/invsqrt/learning and retry manually)')
+                log(f'no round progress after 4 consecutive failures; stopping '
+                    f'(inspect {ws}/learning and retry manually)')
                 return 3
         time.sleep(30)
 

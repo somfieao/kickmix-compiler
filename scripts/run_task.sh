@@ -1,16 +1,30 @@
 #!/usr/bin/env bash
-# Launch one DREAM-RSI evolve invocation for the vqcc_invsqrt task.
-# Environment: ROUNDS, BRANCHES, REFINE, MAX_WORKERS, RESUME (see run_offpeak.py).
+# Launch one DREAM-RSI evolve invocation for a competition task.
+#
+#   TASK        task directory under tasks/ (default: vqcc_invsqrt)
+#   ROUNDS, BRANCHES, REFINE, MAX_WORKERS, RESUME   run shape (see run_offpeak.py)
+#   WORKSPACE   override the workspace dir (default: workspaces/<task minus vqcc_>)
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 source .env
+
+TASK="${TASK:-vqcc_invsqrt}"
+TASK_DIR="tasks/$TASK"
+SHORT="${TASK#vqcc_}"
+PROBLEM="${PROBLEM:-$TASK_DIR/$TASK.txt}"
+EVALUATOR="${EVALUATOR:-$TASK_DIR/evaluator.py}"
+INIT_PROGRAM="${INIT_PROGRAM:-$TASK_DIR/init_program.py}"
 
 ROUNDS="${ROUNDS:-5}"
 BRANCHES="${BRANCHES:-10}"
 REFINE="${REFINE:-10}"
 MAX_WORKERS="${MAX_WORKERS:-10}"
-WORKSPACE="workspaces/invsqrt"
+WORKSPACE="${WORKSPACE:-workspaces/$SHORT}"
 RESUME="${RESUME:-0}"
+
+for f in "$PROBLEM" "$EVALUATOR" "$INIT_PROGRAM"; do
+  [ -f "$f" ] || { echo "[run_task] missing task file: $f" >&2; exit 2; }
+done
 
 start_cycle=0
 from_stage=explore
@@ -38,9 +52,7 @@ fi
   --explore-eval-timeout "$DRSI_EVAL_TIMEOUT_SEC" --no-explore-shell \
   --direction-mode off --discover-rounds 3 --eval-timeout 3600 \
   --target run_best --no-update-baseline-champion \
-  --problem tasks/vqcc_invsqrt/vqcc_invsqrt.txt \
-  --evaluator tasks/vqcc_invsqrt/evaluator.py \
-  --init-program tasks/vqcc_invsqrt/init_program.py
+  --problem "$PROBLEM" --evaluator "$EVALUATOR" --init-program "$INIT_PROGRAM"
 rc=$?
 # evolve exits 1 when the FINAL learning step selects no policy; that is fine
 # once every round is archived.
